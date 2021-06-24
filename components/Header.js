@@ -10,15 +10,44 @@ import {
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { clearFilters, clearNearby } from "../features/placeSlice";
-import { useDispatch } from "react-redux";
+import {
+  clearFilters,
+  clearNearby,
+  selectPlaces,
+} from "../features/placeSlice";
+import { useDispatch, useSelector } from "react-redux";
 function Header({ hotels }) {
   const dispatch = useDispatch();
-  console.log("hotels.city", hotels.city);
+  const all_hotel = useSelector(selectPlaces);
+  const dataList = all_hotel;
+
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const excludeColumns = ["id", "color"];
+
+  const handleChange = (value) => {
+    setSearchTerm(value);
+    filterData(value);
+  };
+
+  const filterData = (value) => {
+    const Value = value.toLocaleUpperCase().trim();
+    if (Value === "") setSearchResults(dataList);
+    else {
+      const filteredData = dataList.filter((item) => {
+        return Object.keys(item).some((key) =>
+          excludeColumns.includes(key)
+            ? false
+            : item[key].toString().toLocaleUpperCase().includes(Value)
+        );
+      });
+      setSearchResults(filteredData);
+    }
+  };
+
+  console.log(searchResults);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -105,7 +134,7 @@ function Header({ hotels }) {
             onBlur={() => setShowResults(false)}
             onFocus={() => setShowResults(true)}
             value={searchTerm}
-            onChange={handleSearch}
+            onChange={(e) => handleChange(e.target.value)}
             className="w-full outline-none bg-transparent cursor-pointer h-full rounded-l-md focus:outline-none"
             placeholder="Where are you going?"
           />
@@ -116,7 +145,7 @@ function Header({ hotels }) {
                 onClick={() => setShowResults(true)}
                 onMouseOver={() => setShowResults(true)}
                 onMouseLeave={() => setShowResults(false)}
-                className="absolute w-full bg-white rounded-md bottom-0 left-0 "
+                className="absolute w-full bg-white rounded-md bottom-0 left-0 z-50"
                 style={{
                   transform: "translateY(100%)",
                   height: "auto",
@@ -124,33 +153,18 @@ function Header({ hotels }) {
                   overflowY: "auto",
                 }}
               >
-                <div
-                  key={Math.random()}
-                  className="p-2 mt-2 border-b-2 rounded-md border-gray-100 bg-gray-50 hover:bg-gray-400 group"
-                >
-                  <Link href={`/location`}>
-                    <h5 className="font-medium text-sm text-gray-600 group-hover:text-white ">
-                      All
-                    </h5>
-                  </Link>
-                  <Link href={`/location`}>
-                    <p className="text-xs text-gray-400 group-hover:text-white uppercase">
-                      all
-                    </p>
-                  </Link>
-                </div>
                 {!!searchResults.length ? (
                   searchResults.map(({ id, city, name }) => (
                     <div
                       key={Math.random()}
                       className="p-2 mt-2 border-b-2 rounded-md border-gray-100 bg-gray-50 hover:bg-gray-400 group"
                     >
-                      <Link href={`/product/${id}`}>
+                      <Link href={`/hotel/${id}`}>
                         <h5 className="font-medium text-sm text-gray-600 group-hover:text-white ">
                           {name}
                         </h5>
                       </Link>
-                      <Link href={`/product/${id}`}>
+                      <Link href={`/hotel/${id}`}>
                         <p className="text-xs text-gray-400 group-hover:text-white uppercase">
                           {city}
                         </p>

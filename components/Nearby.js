@@ -67,7 +67,7 @@ function Nearby() {
         </h1>
       </div>
 
-      <div className="p-10 grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-auto -mt-16 lg:-mt-0 ">
+      <div className="p-0 lg:p-10 grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-auto -mt-16 lg:-mt-0 ">
         {nearbyData.map((nearby) => (
           <NearbyItem nearby={nearby} />
         ))}

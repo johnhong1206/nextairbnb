@@ -7,9 +7,16 @@ import LiveanyWhere from "../components/LiveanyWhere";
 import Banner2 from "../components/Banner2";
 import DiscoverExperiences from "../components/DiscoverExperiences";
 import BecomeHost from "../components/BecomeHost";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addPlace } from "../features/placeSlice";
 
 export default function Home({ hotels }) {
-  console.log("hotels", hotels);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(addPlace(hotels));
+  }, [hotels]);
+
   return (
     <div className="bg-gray-100 max-h-screen overflow-y-scroll">
       <Head>

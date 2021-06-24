@@ -16,7 +16,7 @@ function NearbyItem({ nearby }) {
     <div
       onClick={navtoLocation}
       key={nearby.src}
-      className=" relative flex flex-col m-5 bg-white z-30 p-10 shadow-lg cursor-pointer"
+      className=" w-64 relative flex flex-col m-5 bg-white z-30 p-4 shadow-lg cursor-pointer"
     >
       <Image src={nearby.src} width={200} height={200} />
 
