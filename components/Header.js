@@ -10,12 +10,18 @@ import {
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
+import { FiUsers } from "react-icons/fi";
 import {
   clearFilters,
   clearNearby,
   selectPlaces,
 } from "../features/placeSlice";
 import { useDispatch, useSelector } from "react-redux";
+
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { DateRangePicker } from "react-date-range";
+
 function Header({ hotels }) {
   const dispatch = useDispatch();
   const all_hotel = useSelector(selectPlaces);
@@ -26,10 +32,36 @@ function Header({ hotels }) {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const excludeColumns = ["id", "color"];
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [noOfGuests, setNoOfGuests] = useState(1);
+  const [pickDate, setPickDate] = useState(false);
+  const [pickLocation, setPickLocation] = useState(true);
+
+  const selectionRange = {
+    startDate: startDate,
+    endDate: endDate,
+    key: "selection",
+  };
+
+  const resetInput = () => {
+    setSearchTerm("");
+    setPickDate(false);
+    setPickLocation(true);
+  };
+
+  const handleSelect = (ranges) => {
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
+  };
 
   const handleChange = (value) => {
     setSearchTerm(value);
     filterData(value);
+  };
+  const search = () => {
+    if (!searchTerm) return false;
+    router.push(`/location/${searchTerm}`);
   };
 
   const filterData = (value) => {
@@ -60,28 +92,17 @@ function Header({ hotels }) {
     dispatch(clearNearby());
   };
 
-  const add = () => {
-    db.collection("hotel").add({
-      amenities: [],
-      category: "",
-      city: "",
-      guests: Number(),
-      bath: Number(),
-      bed: Number(),
-      price: Number(),
-      image: [],
-      description: "",
-      rating: Number(),
-      name: "",
-      state: "",
-      title: "",
-      type: "",
-      live: "",
-    });
+  const toggleLocation = () => {
+    setPickDate(false);
+    setPickLocation(true);
+  };
+  const toggleDate = () => {
+    setPickDate(true);
+    setPickLocation(false);
   };
 
   return (
-    <div className="bg-white p-2">
+    <header className="bg-white p-2 sticky top-0 z-50 shadow-md">
       <div className="flex justify-between">
         <div onClick={navtoHome} className=" cursor-pointer">
           <Image
@@ -93,17 +114,21 @@ function Header({ hotels }) {
         </div>
         <div className="hidden lg:flex">
           <div className="flex items-center space-x-6 cursor-pointer ml-20">
-            <div className="hover:underline">
-              <h3 className="font-medium">Place to Stay</h3>
+            <div onClick={toggleLocation} className="hover:underline">
+              <h3 className={`font-medium ${pickLocation && "text-red-400"}`}>
+                Place to Stay
+              </h3>
+            </div>
+            <div onClick={toggleDate} className="hover:underline">
+              <h3 className={`font-medium ${pickDate && "text-red-400"}`}>
+                Pick a Date
+              </h3>
             </div>
             <div className="hover:underline">
               <h3 className="font-medium">Experience</h3>
             </div>
             <div className="hover:underline">
               <h3 className="font-medium">Online Experience</h3>
-            </div>
-            <div onClick={add} className="hover:underline">
-              <h3 className="font-medium">Add</h3>
             </div>
           </div>
         </div>
@@ -149,11 +174,50 @@ function Header({ hotels }) {
                 style={{
                   transform: "translateY(100%)",
                   height: "auto",
-                  maxHeight: "400px",
+                  maxHeight: "450px",
                   overflowY: "auto",
                 }}
               >
-                {!!searchResults.length ? (
+                {pickDate && (
+                  <div className=" flex flex-col col-span-3 mx-auto">
+                    <DateRangePicker
+                      ranges={[selectionRange]}
+                      minDate={new Date()}
+                      rangeColors={["#FD5861"]}
+                      onChange={handleSelect}
+                    />
+                    <div className="flex items-center border-b mb-4">
+                      <h2 className="text-2xl flex-grow font-semibold">
+                        Number of Guest
+                      </h2>
+                      <FiUsers className="w-5 h-5" />
+                      <input
+                        value={noOfGuests}
+                        onChange={(e) => setNoOfGuests(e.target.value)}
+                        type="number"
+                        min={1}
+                        className="w-12 pl-2 text-lg outline-none text-red-400"
+                      />
+                    </div>
+                    <div className="flex">
+                      <button
+                        onClick={resetInput}
+                        className="flex-grow text-gray-400 outline-none"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={search}
+                        className="flex-grow text-red-400 outline-none"
+                      >
+                        Search
+                      </button>
+                    </div>
+                    <div className="pb-8" />
+                  </div>
+                )}
+
+                {pickLocation && !!searchResults.length ? (
                   searchResults.map(({ id, city, name }) => (
                     <div
                       key={Math.random()}
@@ -174,9 +238,15 @@ function Header({ hotels }) {
                 ) : (
                   <>
                     {searchTerm && (
-                      <p className="text-xs text-gray-400 text-center py-2">
-                        No hotel found
-                      </p>
+                      <>
+                        {pickLocation ? (
+                          <p className="text-xs text-gray-400 text-center py-2">
+                            No hotel found
+                          </p>
+                        ) : (
+                          <div className="pb-10" />
+                        )}
+                      </>
                     )}
                   </>
                 )}
@@ -185,7 +255,7 @@ function Header({ hotels }) {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

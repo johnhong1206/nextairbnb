@@ -18,4 +18,8 @@ module.exports = withImages({
       "www.airbnb.com",
     ],
   },
+  env: {
+    mapbox_key:
+      "pk.eyJ1Ijoiem9uZ2hvbmciLCJhIjoiY2tzMWEyNzVxMDFibTJ2bnQ5ZXNzY2tzaSJ9.F4PeIms1_XnvN9ByIRJHVA",
+  },
 });

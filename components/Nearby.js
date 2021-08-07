@@ -60,9 +60,9 @@ function Nearby() {
     <div className=" relative flex flex-col m-5 z-30 p-10 -mt-12 md:-mt-56 lg:-mt-96 group">
       <div
         onClick={() => router.push("/hotel")}
-        className="relative p-4 w-1/3 mx-auto md:bg-gradient-to-t md:from-[black] group-hover:from-[lightgray]"
+        className="relative p-4 w-1/3 mx-auto md:bg-gradient-to-t md:from-[black] group-hover:from-[lightgray] hover:shadow-lg scale-95 transform translate duration-150"
       >
-        <h1 className=" font-medium text-black md:text-gray-100 text-center text-lg md:text-xl lg:text-2xl cursor-pointer group-hover:underline">
+        <h1 className=" font-medium text-black md:text-gray-100 text-center text-lg md:text-xl lg:text-2xl cursor-pointer group-hover:underline ">
           Explore Nearby
         </h1>
       </div>

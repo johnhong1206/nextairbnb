@@ -6,8 +6,11 @@ import Fade from "react-reveal/Fade";
 import SuggestHotel from "./SuggestHotel";
 import { useCollection } from "react-firebase-hooks/firestore";
 import db from "../config/firebase";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
+import { getCenter } from "geolib";
 
 function HotelDetails({
+  hotelDetails,
   name,
   rating,
   city,
@@ -21,19 +24,36 @@ function HotelDetails({
   bath,
   price,
   amenities,
-  hotels,
   hotelid,
+  lat,
+  long,
 }) {
   const [showAmenities, showsetShowAmenities] = useState(false);
   const [activeImage, setActiveImage] = useState(image[0]);
   const [availableDate, setAvailableDate] = useState(
     availableDate ? availableDate : ""
   );
+  console.log("hotelDetails", hotelDetails);
 
   const suggestHotelRef = db.collection("hotel").where("city", "==", city);
 
   const [suggestHotels] = useCollection(city && suggestHotelRef);
   console.log(hotelid);
+
+  const coordinates = { latitud: lat, longitude: long };
+
+  console.log("coordinates", coordinates);
+  const center = getCenter(coordinates);
+
+  console.log("center.lat", center);
+  const [viewport, setViewport] = useState({
+    width: "100%",
+    height: "100%",
+    latitude: lat,
+    longitude: long,
+    zoom: 11,
+  });
+
   return (
     <>
       <Fade bottom>
@@ -235,7 +255,42 @@ function HotelDetails({
               ))}
             </div>
           </div>
-          <div className="pb-32" />
+          <div className="h-[40vh] xl:min-w-[600px] relative">
+            <ReactMapGL
+              mapStyle="mapbox://styles/zonghong/cks1a85to4kqf18p6zuj5zdx6"
+              mapboxApiAccessToken={process.env.mapbox_key}
+              {...viewport}
+              onViewportChange={(nextViewport) => setViewport(nextViewport)}
+            >
+              <Marker
+                longitude={long}
+                latitude={lat}
+                offsetLeft={-20}
+                offsetTop={-10}
+              >
+                <p
+                  className="cursor-pointer text-2xl animate-bounce relative"
+                  aria-label="push-pin"
+                >
+                  📌
+                </p>
+                <div
+                  style={{
+                    "background-image":
+                      "linear-gradient(rgb(0,0,0,0.5),rgb(0,0,0,0.5))",
+                  }}
+                  className="absolute -top-4 ml-5 w-32 text-center  text-white rounded-full cursor-pointer hover:bg-red-400"
+                >
+                  We are here
+                </div>
+              </Marker>
+            </ReactMapGL>
+            <h2 className="text-center font-light italic">
+              Exact location provided after booking
+            </h2>
+          </div>
+
+          <div className="pb-10" />
         </div>
       </Fade>
     </>

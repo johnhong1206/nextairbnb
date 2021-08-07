@@ -17,6 +17,7 @@ import {
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
+import Map from "../../components/Map";
 
 function live({ hotels }) {
   const dispatch = useDispatch();
@@ -119,114 +120,92 @@ function live({ hotels }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header hotels={hotels} />
-      <main>
-        <div className="p-4">
-          <p className=" font-light ml-1">{filterHotel?.length} stays</p>
+      <main className="flex flex-row px-5">
+        <div>
+          <div className="p-4">
+            <p className=" font-light ml-1">{filterHotel?.length} stays</p>
 
-          <div className="flex items-baseline space-x-4">
-            <h1 className="text-3xl font-medium">Stays in </h1>
-            {showFilter ? (
-              <AiOutlineUp
-                onClick={() => setShowFilter(false)}
-                className=" cursor-pointer"
-              />
-            ) : (
-              <AiOutlineDown
-                onClick={() => setShowFilter(true)}
-                className=" cursor-pointer"
-              />
-            )}
-          </div>
-          <div className=" mt-6 grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4">
-            {showFilter ? (
-              <>
-                {amenities &&
-                  amenities.map((value) => (
-                    <div
-                      key={value}
-                      onClick={() => filter(value, "amenities")}
-                      className={`flex justify-center p-1 lg:p-2 items-center bg-transparent cursor-pointer bg-gray-200 rounded-full  ${
-                        value == activeAmenities &&
-                        "  text-black font-bold shadow-inner"
-                      }
+            <div className="flex items-baseline space-x-4">
+              <h1 className="text-3xl font-medium">Stays in {nearby}</h1>
+              {showFilter ? (
+                <AiOutlineUp
+                  onClick={() => setShowFilter(false)}
+                  className=" cursor-pointer"
+                />
+              ) : (
+                <AiOutlineDown
+                  onClick={() => setShowFilter(true)}
+                  className=" cursor-pointer"
+                />
+              )}
+            </div>
+            <div className=" mt-6 grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4">
+              {showFilter ? (
+                <>
+                  {amenities &&
+                    amenities.map((value) => (
+                      <div
+                        key={value}
+                        onClick={() => filter(value, "amenities")}
+                        className={`flex justify-center p-1 lg:p-2 items-center bg-transparent cursor-pointer hover:shadow-lg bg-gray-200 rounded-full transition transform duration-100 ease-out ${
+                          value == activeAmenities &&
+                          "  text-black font-bold shadow-inner scale-95 transform translate duration-150"
+                        }
                   `}
-                    >
-                      <p className="text-center">{value}</p>
-                    </div>
-                  ))}
-              </>
-            ) : (
-              <>
-                {amenities &&
-                  amenities.slice(0, 4).map((value) => (
-                    <div
-                      key={value}
-                      onClick={() => filter(value, "amenities")}
-                      className={`flex justify-center p-1 lg:p-2 items-center bg-transparent cursor-pointer bg-gray-200 rounded-full  ${
-                        value == activeAmenities &&
-                        "  text-black font-bold shadow-inner"
-                      }
-                    `}
-                    >
-                      <div>
+                      >
                         <p className="text-center">{value}</p>
                       </div>
-                    </div>
-                  ))}
-              </>
+                    ))}
+                </>
+              ) : (
+                <>
+                  {amenities &&
+                    amenities.slice(0, 4).map((value) => (
+                      <div
+                        key={value}
+                        onClick={() => filter(value, "amenities")}
+                        className={`flex justify-center p-1 lg:p-2 hover:shadow-lg items-center bg-transparent cursor-pointer bg-gray-200 rounded-full transition transform duration-100 ease-out ${
+                          value == activeAmenities &&
+                          "  text-black font-bold shadow-inner scale-95 transform translate duration-150"
+                        }
+                    `}
+                      >
+                        <div>
+                          <p className="text-center">{value}</p>
+                        </div>
+                      </div>
+                    ))}
+                </>
+              )}
+            </div>
+            <div className=" h-28 p-4 ">
+              <h2 className="font-bold text-base text-gray-600 mb-6">Price</h2>
+              <div className="mr-10  transition transform duration-100 ease-out">
+                <InputRange
+                  maxValue={priceMax}
+                  minValue={0}
+                  value={price}
+                  formatLabel={(value) => `RM ${value}`}
+                  onChange={priceFilter}
+                />
+              </div>
+            </div>
+            {showClear && (
+              <div className="p-4">
+                <button
+                  onClick={clearAllFilters}
+                  className="bg-red-400 hover:text-white w-full p-3 rounded-2xl ring-gray-200 text-sm text-gray-800 font-medium scale-95 hover:shadow-lg transition transform duration-100 ease-out
+  hover:ring-1 focus:outline-none active:ring-gray-300 "
+                >
+                  Clear Filter
+                </button>
+              </div>
             )}
           </div>
-          <div className=" h-28 p-4 ">
-            <h2 className="font-bold text-base text-gray-600 mb-6">Price</h2>
-            <div className="mr-10">
-              <InputRange
-                maxValue={priceMax}
-                minValue={0}
-                value={price}
-                formatLabel={(value) => `RM ${value}`}
-                onChange={priceFilter}
-              />
-            </div>
-          </div>
-          {showClear && (
-            <div className="p-4">
-              <button
-                onClick={clearAllFilters}
-                className="bg-pink-400 hover:text-white w-full p-3 rounded-2xl ring-gray-200 text-sm text-gray-800 
-  hover:ring-1 focus:outline-none active:ring-gray-300 hover:shadow-md"
-              >
-                Clear Filter
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-1 p-1">
-          {showResults && hotels ? (
-            <>
-              {hotels.map((hotel) => (
-                <LocationList
-                  id={hotel.id}
-                  name={hotel.name}
-                  city={hotel.city}
-                  price={hotel.price}
-                  category={hotel.category}
-                  image={hotel.image}
-                  rating={hotel.rating}
-                  state={hotel.state}
-                  type={hotel.type}
-                  roomSize={hotel.roomSize}
-                  guests={hotel.guests}
-                  bed={hotel.bed}
-                  bath={hotel.bath}
-                  amenities={hotel.amenities}
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {!showResults && !!filterHotel?.length ? (
-                filterHotel.map((hotel) => (
+          <div className="mt-1 p-1">
+            {showResults && hotels ? (
+              <>
+                {hotels.map((hotel) => (
                   <LocationList
                     id={hotel.id}
                     name={hotel.name}
@@ -243,13 +222,40 @@ function live({ hotels }) {
                     bath={hotel.bath}
                     amenities={hotel.amenities}
                   />
-                ))
-              ) : (
-                <>Dont Have Result</>
-              )}
-            </>
-          )}
-          <div className="pb-10" />
+                ))}
+              </>
+            ) : (
+              <>
+                {!showResults && !!filterHotel?.length ? (
+                  filterHotel.map((hotel) => (
+                    <LocationList
+                      id={hotel.id}
+                      name={hotel.name}
+                      city={hotel.city}
+                      price={hotel.price}
+                      category={hotel.category}
+                      image={hotel.image}
+                      rating={hotel.rating}
+                      state={hotel.state}
+                      type={hotel.type}
+                      roomSize={hotel.roomSize}
+                      guests={hotel.guests}
+                      bed={hotel.bed}
+                      bath={hotel.bath}
+                      amenities={hotel.amenities}
+                    />
+                  ))
+                ) : (
+                  <>Dont Have Result</>
+                )}
+              </>
+            )}
+
+            <div className="pb-10" />
+          </div>
+        </div>
+        <div className="hidden xl:inline-flex xl:min-w-[600px]">
+          <Map hotels={hotels} />
         </div>
       </main>
     </div>

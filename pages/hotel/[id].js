@@ -30,6 +30,9 @@ function Hotel({ hotels, hotelDetails }) {
           bath={hotelDetails.bath}
           price={hotelDetails.price}
           amenities={hotelDetails.amenities}
+          hotelDetails={hotelDetails}
+          lat={hotelDetails.lat}
+          long={hotelDetails.long}
         />
       </main>
     </div>
