@@ -1,15 +1,24 @@
 import Head from "next/head";
 import Header from "../components/Header";
-import db from "../config/firebase";
-import Banner from "../components/Banner";
-import Nearby from "../components/Nearby";
-import Topbar from "../components/Topbar";
-import LiveanyWhere from "../components/LiveanyWhere";
-import Banner2 from "../components/Banner2";
-import DiscoverExperiences from "../components/DiscoverExperiences";
-import BecomeHost from "../components/BecomeHost";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import dynamic from "next/dynamic";
+
+//firebase
+import db from "../config/firebase";
+
+//components
+const Banner = dynamic(() => import("../components/Banner"));
+const Nearby = dynamic(() => import("../components/Nearby"));
+const Topbar = dynamic(() => import("../components/Topbar"));
+const LiveanyWhere = dynamic(() => import("../components/LiveanyWhere"));
+const Banner2 = dynamic(() => import("../components/Banner2"));
+const DiscoverExperiences = dynamic(() =>
+  import("../components/DiscoverExperiences")
+);
+const BecomeHost = dynamic(() => import("../components/BecomeHost"));
+
+//redux
+import { useDispatch } from "react-redux";
 import { addPlace } from "../features/placeSlice";
 
 export default function Home({ hotels }) {

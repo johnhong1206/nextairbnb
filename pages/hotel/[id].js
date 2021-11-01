@@ -1,7 +1,12 @@
-import Header from "../../components/Header";
-import HotelDetails from "../../components/HotelDetails";
-import db from "../../config/firebase";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+
+//components
+const Header = dynamic(() => import("../../components/Header"));
+const HotelDetails = dynamic(() => import("../../components/HotelDetails"));
+
+//firebase
+import db from "../../config/firebase";
 
 function Hotel({ hotels, hotelDetails }) {
   return (

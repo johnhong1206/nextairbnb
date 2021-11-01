@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import Currency from "react-currency-formatter";
 import { AiFillStar } from "react-icons/ai";
 
 function LocationList({

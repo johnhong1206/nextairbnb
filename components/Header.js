@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import db from "../config/firebase";
-
 import { useRouter } from "next/router";
+
 import Logo from "../images/Airbnb-logo.jpg";
+
+//icons
 import {
   AiOutlineGlobal,
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
+
+//redux
+import { useDispatch, useSelector } from "react-redux";
 import {
   clearFilters,
   clearNearby,
   selectPlaces,
 } from "../features/placeSlice";
-import { useDispatch, useSelector } from "react-redux";
 
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -79,13 +82,6 @@ function Header({ hotels }) {
     }
   };
 
-  console.log(searchResults);
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setSearchResults(hotels.filter((hotel) => hotel.city.includes(searchTerm)));
-  };
-
   const navtoHome = () => {
     router.replace("/");
     dispatch(clearFilters());
@@ -102,7 +98,7 @@ function Header({ hotels }) {
   };
 
   return (
-    <header className="bg-white p-2 sticky top-0 z-50 shadow-md">
+    <header className="bg-white p-2 sticky top-0 z-50 shadow-md w-full">
       <div className="flex justify-between">
         <div onClick={navtoHome} className=" cursor-pointer">
           <Image

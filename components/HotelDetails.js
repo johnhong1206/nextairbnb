@@ -1,13 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { AiFillStar } from "react-icons/ai";
 import Fade from "react-reveal/Fade";
-import SuggestHotel from "./SuggestHotel";
-import { useCollection } from "react-firebase-hooks/firestore";
-import db from "../config/firebase";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { getCenter } from "geolib";
+import dynamic from "next/dynamic";
+
+//icons
+import { AiFillStar } from "react-icons/ai";
+
+//components
+const SuggestHotel = dynamic(() => import("./SuggestHotel"));
+
+//firebase
+import { useCollection } from "react-firebase-hooks/firestore";
+import db from "../config/firebase";
 
 function HotelDetails({
   hotelDetails,
@@ -289,7 +296,6 @@ function HotelDetails({
               Exact location provided after booking
             </h2>
           </div>
-
           <div className="pb-10" />
         </div>
       </Fade>

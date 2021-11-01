@@ -1,10 +1,17 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import dynamic from "next/dynamic";
+
+//utils
 import { getUniqueValues } from "../../utils/helpers";
 
-import Header from "../../components/Header";
-import LocationList from "../../components/LocationList";
+//components
+const Header = dynamic(() => import("../../components/Header"));
+const LocationList = dynamic(() => import("../../components/LocationList"));
+const Map = dynamic(() => import("../../components/Map"));
+
+//firebase
 import db from "../../config/firebase";
 import {
   addPlace,
@@ -15,10 +22,10 @@ import {
   updateFilters,
 } from "../../features/placeSlice";
 
+//icons
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
-import Map from "../../components/Map";
 
 function LocationHotel({ hotels }) {
   const dispatch = useDispatch();

@@ -1,4 +1,5 @@
-import HotelList from "./HotelList";
+import dynamic from "next/dynamic";
+const HotelList = dynamic(() => import("./HotelList"));
 
 function Place({ hotels }) {
   return (
