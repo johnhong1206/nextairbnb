@@ -7,6 +7,7 @@ This Project is built with NextJs, Redux, Mapbox Tailwind CSS and Firebase
 2) Filter function 
 3) Hotel Details
 4) Map integration
+5) Custom Search Function
 
 
 
