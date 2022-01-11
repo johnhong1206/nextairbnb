@@ -1,7 +1,6 @@
-This is airbnb like webpage
+This is airbnbvclone webpage
+
 This Project is built with NextJs, Redux, Mapbox Tailwind CSS and Firebase
-
-
 
 ---Main Function---
 1) Hotel List
@@ -14,6 +13,5 @@ This Project is built with NextJs, Redux, Mapbox Tailwind CSS and Firebase
 
 ---Future Update Plan---
 1) Booking room function
-2) better filter
-3) better ui
-4) 
+2) better filter function with more options
+3) better Hotel List UI
